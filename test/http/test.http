@@ -1,0 +1,30 @@
+### ping
+GET {{host}}/ping
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+<> 2022-01-23T094247.200.json
+
+### Not Found
+POST {{host}}/notfound
+
+### sample get
+GET {{host}}/sam
+content-type: application/json
+
+{
+  "name": "good"
+}
+
+
+### sample save
+POST {{host}}/sam
+content-type: application/json
+
+{
+  "name": "good"
+}
