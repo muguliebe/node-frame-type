@@ -14,6 +14,7 @@ import notFoundErrorMiddleware from './middleware/not-found-error.middleware'
 import readReadSync from 'recursive-readdir-sync'
 import schedule from 'node-schedule'
 import { InitRouterOut, BatchInitOut } from './base/Base'
+import cluster from 'cluster'
 
 export interface ServerConfigIn {
     app: Express.Application
@@ -76,6 +77,8 @@ export default class ServerConfig {
         try {
             await this.app.listen(this.port, () => {
                 log.info('==========================================================================')
+                log.info(`PID               : ${process.pid}`)
+                log.info(`Cluster ID        : ${cluster.worker?.id}`)
                 log.info('environment       : ' + Static.NODE_ENV)
                 log.info(`LOG Level         : ${process.env.LOG_LEVEL}`)
                 log.info(`Listening on port : ${this.port}`)

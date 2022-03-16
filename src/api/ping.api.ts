@@ -4,6 +4,7 @@ import AsyncWrapper from '../lib/asyncWrapper'
 import { BaseRequest, BaseResponse } from '../types/base'
 import { ipEvents } from '../subscriber/event/ip.event'
 import { servicePing } from '../service/ping.service'
+import cluster from 'cluster'
 
 // initialize
 const router = Router()
@@ -24,7 +25,7 @@ export const initRouter = (): InitRouterOut => {
 }
 
 const ping = async (req: BaseRequest, res: BaseResponse) => {
-    log.debug(`gid: ${req.commons?.gid}`)
+    log.debug(`gid: ${req.commons?.gid}, cluster:${cluster.worker?.id}`)
 
     const result = await servicePing.ping()
     res.json(result)
