@@ -10,8 +10,11 @@ import mkdirp from 'mkdirp'
 import EventEmitter from 'events'
 import Express from 'express'
 import { servicePostup } from './service/sample/postup.service'
+import cluster from 'cluster'
+import os from 'os'
 
 const emitter = new EventEmitter()
+const totCpu = os.cpus().length
 let app = Express()
 let server: ServerConfig | undefined
 
@@ -105,9 +108,23 @@ emitter.on('post', async () => {
     servicePostup.postUp()
 })
 
-main().catch(e => {
-    log.error(`error occurred at main() ${e}`)
-    throw e
-})
+if (cluster.isPrimary) {
+    console.log(`Number of CPUs: ${totCpu}`)
+    console.log(`Master pid: ${process.pid}`)
+
+    for (let i = 0; i < totCpu; i++) {
+        cluster.fork()
+    }
+
+    cluster.on('exit', (worker, code, signal) => {
+        console.log(`worker ${worker.process.pid} died`)
+        cluster.fork()
+    })
+} else {
+    main().catch(e => {
+        log.error(`error occurred at main() ${e}`)
+        throw e
+    })
+}
 
 export default app
