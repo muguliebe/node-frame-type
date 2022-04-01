@@ -40,7 +40,9 @@ export default class ServerConfig {
         try {
             this.bindController(apiPath)
             if (process.env.NODE_ENV !== 'test') {
-                this.bindBatch(batchPath)
+                if (cluster.worker?.id === 1) {
+                    this.bindBatch(batchPath)
+                }
                 this.bindSubscribeMq(mqPath)
             }
         } catch (e) {
