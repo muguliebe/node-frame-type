@@ -100,7 +100,7 @@ function setCommonAreaWhenStart(req: BaseRequest, res: BaseResponse, ip: string 
     res.commons = commons
 }
 
-async function saveTr(req: BaseRequest, res: BaseResponse, responseTime: String, contentLength: Number) {
+async function saveTr(req: BaseRequest, res: BaseResponse, responseTime: String, contentLength: String) {
     log.silly('allAdvice] saveTr start')
     const tr = new Transaction()
     tr.day = format(req.commons?.startDate!, 'yyMMdd')
@@ -115,7 +115,7 @@ async function saveTr(req: BaseRequest, res: BaseResponse, responseTime: String,
     tr.responseTime = Number(responseTime)
     tr.status = Number(res.statusCode)
     tr.message = res.statusMessage
-    tr.contentLength = Number(contentLength)
+    tr.contentLength = contentLength
 
     await tr.save()
     log.silly('allAdvice] saveTr end')
