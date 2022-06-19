@@ -105,7 +105,7 @@ async function saveTr(req: BaseRequest, res: BaseResponse, responseTime: String,
     const tr = new Transaction()
     tr.day = format(req.commons?.startDate!, 'yyMMdd')
     tr.time = format(req.commons?.startDate!, 'HHmmss')
-    tr.app = 'node-frame'
+    tr.app = process.env.APP_NAME
     tr.env = Static.NODE_ENV
     tr.method = req.method
     tr.url = req.commons?.url
