@@ -14,7 +14,7 @@
     "scripts": {
         "lint": "eslint --ext .ts .",
         "format": "prettier --ignore-path .gitignore --write 'src/**/*.ts'",
-        "build": "rimraf ./build && tsc",
+        "build": "rimraf ./dist && tsc",
         "dev": "nodemon",
         "dw": "nodemon",
         "start": "IS_CLUSTER=true ts-node src/server.ts",
