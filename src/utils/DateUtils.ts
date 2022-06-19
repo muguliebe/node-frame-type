@@ -19,7 +19,7 @@ export default class DateUtils {
     static addDays = days => date.addDays(new Date(), days)
     static addMonths = months => date.addMonths(new Date(), months)
     static addYears = years => date.addYears(new Date(), years)
-    static extractDate = timestamp => date.format(new Date(timestamp), 'YYYYMMDD')
+    static extractDate:(timestamp) => String = timestamp => date.format(new Date(timestamp), 'YYYYMMDD')
     static extractTime = timestamp => date.format(new Date(timestamp), 'HHmmss')
     static extractFullTime = timestamp => date.format(new Date(timestamp), 'YYYYMMDD HH:mm:ss')
     static diffSeconds = origin => Math.abs((new Date().getTime() - origin.getTime()) / 1000)

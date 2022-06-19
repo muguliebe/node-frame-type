@@ -108,8 +108,8 @@ async function saveTr(req: BaseRequest, res: BaseResponse, responseTime: String,
     tr.ip = req.commons?.ip
     tr.gid = req.commons?.gid
     tr.host = osHostname
-    tr.responseTime = responseTime
-    tr.status = res.statusCode
+    tr.responseTime = Number(responseTime)
+    tr.status = Number(res.statusCode)
     tr.message = res.statusMessage
     tr.contentLength = Number(contentLength)
 
