@@ -137,9 +137,14 @@ const exchange = 'topic.log'
 let channel
 
 async function setQueue() {
-    const connection = await amqp.connect(process.env.MQ_URL)
-    channel = await connection.createConfirmChannel()
-    await channel.assertExchange(exchange, 'topic', { durable: true })
+    try {
+        const connection = await amqp.connect(process.env.MQ_URL)
+        channel = await connection.createConfirmChannel()
+        await channel.assertExchange(exchange, 'topic', {durable: true})
+    }catch (e) {
+        log.error("when connect mq")
+        throw e
+    }
 }
 
 const pubQueueLimit = limit(pubQueue).to(100).per(1000)
