@@ -12,7 +12,7 @@ const transactionSchema = new mongoose.Schema(
         ip: String,
         host: String,
         responseTime: Number,
-        status: String,
+        status: Number,
         message: String,
         contentLength: Number,
         gid: String,
