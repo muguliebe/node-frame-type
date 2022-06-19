@@ -18,7 +18,7 @@ export const initRouter = (): InitRouterOut => {
 
     router.get('/', AsyncWrapper(get))
     router.post('/', AsyncWrapper(save))
-    router.put('/', AsyncWrapper(put))
+    router.put('/:id', AsyncWrapper(put))
 
     return thisRouter
 }
@@ -48,7 +48,12 @@ const save = async (req: BaseRequest, res: BaseResponse) => {
 }
 
 const put = async (req: BaseRequest, res: BaseResponse) => {
-    const result = await serviceSample.put(req.body.id as string)
+
+    if (!req.body.name) {
+        log.error('sampleApi] name is required')
+        res.status(400).end('wow')
+    }
+    const result = await serviceSample.put(req.params.id, req.body.name)
     log.debug(`sampleApi] result: ${result}`)
     res.status(200).end()
 }

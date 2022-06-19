@@ -17,9 +17,9 @@ describe('/sam', () => {
     })
     test('PUT /sam', async () => {
         const inPut = {
-            id: "62af1159e6de103e768b3b25"
+            name: "jest"
         }
-        const res = await global.r.put('/sam').send(inPut)
+        const res = await global.r.put('/sam/62af1159e6de103e768b3b25').send(inPut)
         expect(res.statusCode).toBe(200)
     })
 

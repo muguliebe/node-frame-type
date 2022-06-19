@@ -1,6 +1,7 @@
 import Sample, {ISample} from '../../models/mongo/Sample.model'
 import ServiceProxy from '../../fwk/proxy/service.proxy'
 import DateUtils from "../../utils/DateUtils";
+import {Error} from "mongoose";
 
 class SampleService {
 
@@ -12,11 +13,22 @@ class SampleService {
         return await sample.save()
     }
 
-    async put(inId: string) {
+    async put(inId: string, inName: string) {
+        log.info(`sampleService] inId:${inId}, name:${inName}`)
+
+        // validation
+        if (!inId) {
+            throw new Error(`inId is required`)
+        }
+        if (!inName) {
+            throw new Error(`inName is required`)
+        }
+
+        // main
         const filter = {
             _id: inId
         }
-        await Sample.findByIdAndUpdate(filter, {name: 'changed2'}, {
+        await Sample.findByIdAndUpdate(filter, {name: inName}, {
             upsert: false,
             rawResult: true
         })
