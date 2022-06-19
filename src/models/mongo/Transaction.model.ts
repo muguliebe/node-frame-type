@@ -14,7 +14,7 @@ const transactionSchema = new mongoose.Schema(
         responseTime: Number,
         status: String,
         message: String,
-        contentLength: Number,
+        contentLength: String,
         gid: String,
     },
     {timestamps: true}
