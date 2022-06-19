@@ -26,12 +26,13 @@ export interface ServerConfigIn {
 
 export default class ServerConfig {
     app: Express.Application
-    port: number = 3000
+    port: number
 
-    constructor({ app, port, apiPath, batchPath, mqPath }: ServerConfigIn) {
+    constructor({ app, port=3000, apiPath, batchPath, mqPath }: ServerConfigIn) {
         this.app = app
         this.setDefault()
         this.setMiddleware()
+        this.port = port
 
         this.setMongo()
             .then(r => log.debug('mongo init ok'))
