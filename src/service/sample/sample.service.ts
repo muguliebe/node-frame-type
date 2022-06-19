@@ -5,9 +5,6 @@ import DateUtils from "../../utils/DateUtils";
 class SampleService {
 
     async save(inSave: SampleSaveIn): Promise<ISample> {
-        if (inSave.name === 'what') {
-            throw Error('what')
-        }
         const sample = new Sample()
         sample.day = DateUtils.currentDate()
         sample.time = DateUtils.currentTime()
