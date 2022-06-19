@@ -5,7 +5,10 @@ const transactionSchema = new mongoose.Schema(
     {
         day: String,
         time: String,
+        app: String,
+        method: String,
         url: String,
+        env: String,
         ip: String,
         host: String,
         responseTime: Number,
@@ -14,7 +17,7 @@ const transactionSchema = new mongoose.Schema(
         contentLength: Number,
         gid: String,
     },
-    { timestamps: true }
+    {timestamps: true}
 )
 transactionSchema.plugin(mongoosePaginate)
 

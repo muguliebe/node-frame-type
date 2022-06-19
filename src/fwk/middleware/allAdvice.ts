@@ -10,6 +10,7 @@ import { format } from 'date-fns'
 import { BaseRequest, BaseResponse } from '../../types/base'
 import amqp from 'amqplib'
 import limit from 'simple-rate-limiter'
+import Static from "../../lib/static";
 
 let osHostname = os.hostname()
 
@@ -104,6 +105,9 @@ async function saveTr(req: BaseRequest, res: BaseResponse, responseTime: String,
     const tr = new Transaction()
     tr.day = format(req.commons?.startDate!, 'yyMMdd')
     tr.time = format(req.commons?.startDate!, 'HHmmss')
+    tr.app = 'node-frame'
+    tr.env = Static.NODE_ENV
+    tr.method = req.method
     tr.url = req.commons?.url
     tr.ip = req.commons?.ip
     tr.gid = req.commons?.gid
