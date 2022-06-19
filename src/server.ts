@@ -108,19 +108,27 @@ emitter.on('post', async () => {
     servicePostup.postUp()
 })
 
-if (cluster.isPrimary) {
-    console.log(`Number of CPUs: ${totCpu}`)
-    console.log(`Master pid: ${process.pid}`)
+console.log(`IS_CLUSTER: ${process.env['IS_CLUSTER']}`)
+if( process.env['IS_CLUSTER'] === 'true' ) {
+    if (cluster.isPrimary) {
+        console.log(`Number of CPUs: ${totCpu}`)
+        console.log(`Master pid: ${process.pid}`)
 
-    for (let i = 0; i < totCpu; i++) {
-        cluster.fork()
+        for (let i = 0; i < totCpu; i++) {
+            cluster.fork()
+        }
+
+        cluster.on('exit', (worker, code, signal) => {
+            console.log(`worker ${worker.process.pid} died`)
+            cluster.fork()
+        })
+    } else {
+        main().catch(e => {
+            log.error(`error occurred at main() ${e}`)
+            throw e
+        })
     }
-
-    cluster.on('exit', (worker, code, signal) => {
-        console.log(`worker ${worker.process.pid} died`)
-        cluster.fork()
-    })
-} else {
+}else {
     main().catch(e => {
         log.error(`error occurred at main() ${e}`)
         throw e

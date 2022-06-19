@@ -6,5 +6,6 @@ declare namespace NodeJS {
         MONGO_CONNECTED: string
         MQ_USE: string
         MQ_URL: string
+        IS_CLUSTER: string
     }
 }

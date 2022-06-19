@@ -111,7 +111,7 @@ async function saveTr(req: BaseRequest, res: BaseResponse, responseTime: String,
     tr.responseTime = responseTime
     tr.status = res.statusCode
     tr.message = res.statusMessage
-    tr.contentLength = contentLength
+    tr.contentLength = Number(contentLength)
 
     await tr.save()
     log.silly('allAdvice] saveTr end')

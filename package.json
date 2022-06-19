@@ -17,7 +17,8 @@
         "build": "rimraf ./build && tsc",
         "dev": "nodemon",
         "dw": "nodemon",
-        "start": "ts-node src/server.ts",
+        "start": "IS_CLUSTER=true ts-node src/server.ts",
+        "start-cluster": "ts-node src/server.ts",
         "test": "cross-env NODE_ENV=test jest --runInBand --forceExit --maxWorker=1 --silent"
     },
     "devDependencies": {
