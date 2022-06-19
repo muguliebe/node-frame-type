@@ -27,7 +27,9 @@ module.exports = {
         indent: ['error', 4],
         '@typescript-eslint/no-unsafe-assignment': 'off',
         '@typescript-eslint/no-unsafe-member-access': 'off',
-        '@typescript-eslint/restrict-template-expressions': 'off'
+        '@typescript-eslint/no-unsafe-call': 'off',
+        '@typescript-eslint/restrict-template-expressions': 'off',
+        '@typescript-eslint/require-await': 'off',
     },
     ignorePatterns: ['dist/', 'node_modules/', 'coverage', 'log/'],
 }

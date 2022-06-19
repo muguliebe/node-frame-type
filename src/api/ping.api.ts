@@ -1,9 +1,9 @@
-import { Router, Request, Response } from 'express'
-import { InitRouterOut } from '../fwk/base/Base'
+import {Request, Response, Router} from 'express'
+import {InitRouterOut} from '../fwk/base/Base'
 import AsyncWrapper from '../lib/asyncWrapper'
-import { BaseRequest, BaseResponse } from '../types/base'
-import { ipEvents } from '../subscriber/event/ip.event'
-import { servicePing } from '../service/ping.service'
+import {BaseRequest, BaseResponse} from '../types/base'
+import {ipEvents} from '../subscriber/event/ip.event'
+import {servicePing} from '../service/ping.service'
 import cluster from 'cluster'
 
 // initialize

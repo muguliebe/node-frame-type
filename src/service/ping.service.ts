@@ -5,7 +5,7 @@ export class PingService {
     #msg = 'pong'
 
     async ping(): Promise<PingOut> {
-        return {msg: this.#msg}
+        return {msg: this.#msg};
     }
 
     async getIp() {
@@ -21,4 +21,4 @@ interface PingOut {
     msg: string
 }
 
-export const servicePing = new Proxy(new PingService(), ServiceProxy)
+export const servicePing: PingService = new Proxy(new PingService(), ServiceProxy)

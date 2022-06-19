@@ -1,19 +1,18 @@
-import Express, { Request, Response, NextFunction } from 'express'
-import http from 'http'
+/* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-var-requires */
+import Express from 'express'
 import Static from '../lib/static'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import helmet from 'helmet'
 import path from 'path'
-import { getAllFiles } from '../utils/zutils'
+import {getAllFiles} from '../utils/zutils'
 import allAdvice from './middleware/allAdvice'
-import mongoose, { ConnectOptions } from 'mongoose'
-import { BaseRequest, BaseResponse } from '../types/base'
+import mongoose, {ConnectOptions} from 'mongoose'
 import errorMiddleware from './middleware/error.middleware'
 import notFoundErrorMiddleware from './middleware/not-found-error.middleware'
 import readReadSync from 'recursive-readdir-sync'
 import schedule from 'node-schedule'
-import { InitRouterOut, BatchInitOut } from './base/Base'
+import {BatchInitOut, InitRouterOut} from './base/Base'
 import cluster from 'cluster'
 
 export interface ServerConfigIn {
@@ -28,7 +27,7 @@ export default class ServerConfig {
     app: Express.Application
     port: number
 
-    constructor({ app, port=3000, apiPath, batchPath, mqPath }: ServerConfigIn) {
+    constructor({app, port = 3000, apiPath, batchPath, mqPath}: ServerConfigIn) {
         this.app = app
         this.setDefault()
         this.setMiddleware()
@@ -36,13 +35,13 @@ export default class ServerConfig {
         this.port = port
 
         this.setMongo()
-            .then(r => log.debug('mongo init ok'))
+            .then(() => log.debug('mongo init ok'))
             .catch(e => log.error('mongo init err occurred:', e))
 
         try {
             this.bindController(apiPath)
             if (process.env.NODE_ENV !== 'test') {
-                if (cluster.worker?.id === 1) {
+                if (cluster.worker?.id === 1 || process.env['IS_CLUSTER'] === 'false' || process.env['IS_CLUSTER'] === undefined) {
                     this.bindBatch(batchPath)
                 }
                 this.bindSubscribeMq(mqPath)
@@ -58,7 +57,7 @@ export default class ServerConfig {
         this.app.use(cors())
         this.app.set('env', Static.NODE_ENV)
         this.app.set('port', this.port)
-        this.app.use(bodyParser.urlencoded({ extended: false }))
+        this.app.use(bodyParser.urlencoded({extended: false}))
         this.app.use(bodyParser.json())
         this.app.use(helmet())
     }
@@ -77,9 +76,9 @@ export default class ServerConfig {
         }
     }
 
-    async listen() {
+    listen() {
         try {
-            await this.app.listen(this.port, () => {
+            this.app.listen(this.port, () => {
                 log.info('==========================================================================')
                 log.info(`PID               : ${process.pid}`)
                 log.info(`Cluster ID        : ${cluster.worker?.id}`)
@@ -97,9 +96,9 @@ export default class ServerConfig {
 
     private bindController(controllerPath: string) {
         const controllers = path.join(controllerPath)
-        log.debug(`controller bind start at ${controllerPath}`)
+        log.debug(`controller bind start at ${controllers}`)
 
-        getAllFiles(controllerPath)
+        getAllFiles(controllers)
             .filter(file => file.split('.').pop() === 'ts')
             .forEach(file => {
                 try {
@@ -143,7 +142,7 @@ export default class ServerConfig {
             .filter((file: string) => file.split('.').pop() === 'ts')
             .forEach((file: string) => {
                 try {
-                    const consumer = require(file).initQueue()
+                    require(file).initQueue()
                     log.info(`consumer bind: ${file}`)
                 } catch (err) {
                     throw new Error(`${file}:${err}`)
@@ -152,7 +151,7 @@ export default class ServerConfig {
     }
 
     private static async setMongo() {
-        let option = {
+        const option = {
             useUnifiedTopology: true,
             useNewUrlParser: true,
         }
@@ -160,15 +159,17 @@ export default class ServerConfig {
             option.useUnifiedTopology = false
         }
         try {
-            const uri: string = process.env.MONGO_URL!
+            if (!process.env.MONGO_URL) {
+                throw Error('MONGO_URL is not a defined')
+            }
+            const uri: string = process.env.MONGO_URL
             await mongoose.connect(uri, option as ConnectOptions)
             log.debug('mongo connected')
         } catch (e) {
-            log.error('mongo connect fail' + e)
+            log.error(`mongo connect fail:${e}`)
+            throw e
         }
     }
-
-    async closeMongo() {}
 
     private errorHandler() {
         // 404 handler

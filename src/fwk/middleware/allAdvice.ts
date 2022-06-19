@@ -1,23 +1,23 @@
 // noinspection DuplicatedCode
 
-import { NextFunction, Request, Response } from 'express'
+import {NextFunction, Request, Response} from 'express'
 import Transaction from '../../models/mongo/Transaction.model'
-import { Address4, Address6 } from 'ip-address'
-import { v4 as uuidv4 } from 'uuid'
+import {Address4, Address6} from 'ip-address'
+import {v4 as uuidv4} from 'uuid'
 import CommonArea from '../../models/entity/commonArea'
-import os, { hostname } from 'os'
-import { format } from 'date-fns'
-import { BaseRequest, BaseResponse } from '../../types/base'
+import os from 'os'
+import {format} from 'date-fns'
+import {BaseRequest, BaseResponse} from '../../types/base'
 import amqp from 'amqplib'
 import limit from 'simple-rate-limiter'
 import Static from "../../lib/static";
 
-let osHostname = os.hostname()
+const osHostname = os.hostname()
 
 const allAdvice = (req: Request, res: Response, next: NextFunction) => {
     // init ============================================================================================================
     const ip = getIp(req)
-    let logStart = `Start => [from ${ip}] ${req.method} ${req.url.substring(0, 40)}`
+    const logStart = `Start => [from ${ip}] ${req.method} ${req.url.substring(0, 40)}`
     log.info(logStart)
 
     const method = req.method
@@ -30,13 +30,12 @@ const allAdvice = (req: Request, res: Response, next: NextFunction) => {
     // after ===========================================================================================================
     res.once('finish', () => {
         const durationInMilliseconds = getActualRequestDurationInMilliseconds(start)
-        const endDate = new Date()
 
         // - calc human size
-        let conLength = Number(res.getHeader('content-length')) | 0
-        let readableConLength = calcHumanSize(conLength)
+        const conLength = Number(res.getHeader('content-length')) | 0
+        const readableConLength = calcHumanSize(conLength)
 
-        let endLog =
+        const endLog =
             `End      [to   ${ip}] ${method} ${url.substring(0, 40)} ${res.statusCode}` +
             ` [${durationInMilliseconds.toLocaleString()} ms] [deliver ${readableConLength}]`
 
@@ -100,11 +99,11 @@ function setCommonAreaWhenStart(req: BaseRequest, res: BaseResponse, ip: string 
     res.commons = commons
 }
 
-async function saveTr(req: BaseRequest, res: BaseResponse, responseTime: String, contentLength: Number) {
+async function saveTr(req: BaseRequest, res: BaseResponse, responseTime: string, contentLength: number) {
     log.silly('allAdvice] saveTr start')
     const tr = new Transaction()
-    tr.day = format(req.commons?.startDate!, 'yyMMdd')
-    tr.time = format(req.commons?.startDate!, 'HHmmss')
+    tr.day = format(req.commons!.startDate, 'yyMMdd')
+    tr.time = format(req.commons!.startDate, 'HHmmss')
     tr.app = process.env.APP_NAME
     tr.env = Static.NODE_ENV
     tr.method = req.method
@@ -122,7 +121,7 @@ async function saveTr(req: BaseRequest, res: BaseResponse, responseTime: String,
 }
 
 const calcHumanSize = (size: number): string => {
-    let sizeReadable: string = '0 bytes'
+    let sizeReadable = '0 bytes'
     if (size < 1024) {
         sizeReadable = size + ' bytes'
     } else if (size >= 1024 && size < 1024 * 1024) {
@@ -141,7 +140,7 @@ async function setQueue() {
         const connection = await amqp.connect(process.env.MQ_URL)
         channel = await connection.createConfirmChannel()
         await channel.assertExchange(exchange, 'topic', {durable: true})
-    }catch (e) {
+    } catch (e) {
         log.error("when connect mq")
         throw e
     }
@@ -149,13 +148,13 @@ async function setQueue() {
 
 const pubQueueLimit = limit(pubQueue).to(100).per(1000)
 
-async function pubQueue(req: BaseRequest, res: BaseResponse, responseTime: String, contentLength: Number) {
+async function pubQueue(req: BaseRequest, res: BaseResponse, responseTime: string, contentLength: number) {
     const tr = {
-        day: format(req.commons?.startDate!, 'yyMMdd'),
-        time: format(req.commons?.startDate!, 'HHmmss'),
-        url: req.commons?.url,
-        ip: req.commons?.ip,
-        gid: req.commons?.gid,
+        day: format(req.commons!.startDate, 'yyMMdd'),
+        time: format(req.commons!.startDate, 'HHmmss'),
+        url: req.commons!.url,
+        ip: req.commons!.ip,
+        gid: req.commons!.gid,
         host: osHostname,
         responseTime: responseTime,
         status: res.statusCode,
@@ -165,7 +164,7 @@ async function pubQueue(req: BaseRequest, res: BaseResponse, responseTime: Strin
     }
 
     if (!channel) await setQueue()
-    await channel.sendToQueue(exchange, Buffer.from(JSON.stringify(tr)), { persistent: true })
+    await channel.sendToQueue(exchange, Buffer.from(JSON.stringify(tr)), {persistent: true})
 }
 
 export default allAdvice
