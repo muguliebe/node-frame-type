@@ -1,3 +1,4 @@
+/* eslint-disable */
 import date from 'date-and-time'
 
 export default class DateUtils {
@@ -6,8 +7,8 @@ export default class DateUtils {
     static checkTimeZone = () => {
         return date.format(new Date(), 'YYYY-MM-DD HH:mm:ss ddd, MMMM [GMT]Z')
     }
-    static currentDate = () => date.format(new Date(), 'YYYYMMDD')
-    static currentTime = () => date.format(new Date(), 'HHmmss')
+    static currentDate: () => string = () => date.format(new Date(), 'YYYYMMDD')
+    static currentTime: () => string = () => date.format(new Date(), 'HHmmss')
     static currentFullTime = () => date.format(new Date(), 'YYYYMMDD HH:mm:ss')
     static format = format => date.format(new Date(), format)
     static now = () => new Date()
@@ -19,7 +20,7 @@ export default class DateUtils {
     static addDays = days => date.addDays(new Date(), days)
     static addMonths = months => date.addMonths(new Date(), months)
     static addYears = years => date.addYears(new Date(), years)
-    static extractDate:(timestamp) => String = timestamp => date.format(new Date(timestamp), 'YYYYMMDD')
+    static extractDate: (timestamp) => string = timestamp => date.format(new Date(timestamp), 'YYYYMMDD')
     static extractTime = timestamp => date.format(new Date(timestamp), 'HHmmss')
     static extractFullTime = timestamp => date.format(new Date(timestamp), 'YYYYMMDD HH:mm:ss')
     static diffSeconds = origin => Math.abs((new Date().getTime() - origin.getTime()) / 1000)

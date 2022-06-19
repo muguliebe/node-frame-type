@@ -1,14 +1,21 @@
 import mongoose from 'mongoose'
 import mongoosePaginate from 'mongoose-paginate-v2'
 
-const sampleSchema = new mongoose.Schema(
+export interface ISample {
+    day: string;
+    time: string;
+    name: string;
+}
+
+const sampleSchema = new mongoose.Schema<ISample>(
     {
         day: String,
         time: String,
         name: String,
     },
-    { timestamps: true }
+    {timestamps: true}
 )
 sampleSchema.plugin(mongoosePaginate)
 
-export default mongoose.model('sample', sampleSchema, 'sample')
+const Sample: mongoose.Model<ISample> = mongoose.model<ISample>('sample', sampleSchema)
+export default Sample

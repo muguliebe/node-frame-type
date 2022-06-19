@@ -1,11 +1,6 @@
-import { InGetByName, SampleSaveIn } from '../../../src/service/sample/sample.service'
+import {InGetByName, SampleSaveIn} from '../../../src/service/sample/sample.service'
 
 describe('/sam', () => {
-    test('GET /sam/text return ok', async () => {
-        const res = await global.r.get('/sam/text')
-        expect(res.statusCode).toBe(200)
-        expect(res.body).toBe('good job')
-    })
     test('POST /sam', async () => {
         const inPost: SampleSaveIn = {
             name: 'name',
@@ -20,6 +15,14 @@ describe('/sam', () => {
         const res = await global.r.get('/sam')
         expect(res.statusCode).toBe(200)
     })
+    test('PUT /sam', async () => {
+        const inPut = {
+            id: "62af1159e6de103e768b3b25"
+        }
+        const res = await global.r.put('/sam').send(inPut)
+        expect(res.statusCode).toBe(200)
+    })
+
     test('POST /sam return 400', async () => {
         const res = await global.r.post('/sam')
         expect(res.statusCode).toBe(400)

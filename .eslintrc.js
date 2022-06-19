@@ -25,6 +25,10 @@ module.exports = {
         'no-unused-vars': 'warn',
         'no-undef': 'off',
         indent: ['error', 4],
+        '@typescript-eslint/no-unsafe-assignment': 'off',
+        '@typescript-eslint/no-unsafe-member-access': 'off',
+        '@typescript-eslint/restrict-template-expressions': 'off'
     },
     ignorePatterns: ['dist/', 'node_modules/', 'coverage', 'log/'],
 }
+

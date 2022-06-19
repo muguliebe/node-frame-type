@@ -1,8 +1,8 @@
-import { Router, Request, Response } from 'express'
-import { InitRouterOut } from '../fwk/base/Base'
+import {Router} from 'express'
+import {InitRouterOut} from '../fwk/base/Base'
 import AsyncWrapper from '../lib/asyncWrapper'
-import { BaseRequest, BaseResponse } from '../types/base'
-import { serviceSample, SampleSaveIn, InGetByName } from '../service/sample/sample.service'
+import {BaseRequest, BaseResponse} from '../types/base'
+import {InGetByName, SampleSaveIn, serviceSample} from '../service/sample/sample.service'
 
 // initialize
 const router = Router()
@@ -17,15 +17,10 @@ export const initRouter = (): InitRouterOut => {
     }
 
     router.get('/', AsyncWrapper(get))
-    router.get('/text', AsyncWrapper(text))
     router.post('/', AsyncWrapper(save))
+    router.put('/', AsyncWrapper(put))
 
     return thisRouter
-}
-
-const text = async (req: BaseRequest, res: BaseResponse) => {
-    const result = await serviceSample.sample('')
-    res.json(result)
 }
 
 const get = async (req: BaseRequest, res: BaseResponse) => {
@@ -47,7 +42,14 @@ const save = async (req: BaseRequest, res: BaseResponse) => {
         res.status(400).end()
     }
 
-    await serviceSample.save(inSave)
+    const result = await serviceSample.save(inSave)
+    log.debug(`sampleApi] result: ${result}`)
+    res.status(200).end()
+}
+
+const put = async (req: BaseRequest, res: BaseResponse) => {
+    const result = await serviceSample.put(req.body.id as string)
+    log.debug(`sampleApi] result: ${result}`)
     res.status(200).end()
 }
 

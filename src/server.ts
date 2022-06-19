@@ -1,4 +1,4 @@
-import ServerConfig, { ServerConfigIn } from './fwk/server.config'
+import ServerConfig, {ServerConfigIn} from './fwk/server.config'
 import * as winston from 'winston'
 import * as logging from './lib/logger'
 import winstonDaily from 'winston-daily-rotate-file'
@@ -6,27 +6,26 @@ import Static from './lib/static'
 import path from 'path'
 import fs from 'fs'
 import dotenv from 'dotenv'
-import mkdirp from 'mkdirp'
 import EventEmitter from 'events'
 import Express from 'express'
-import { servicePostup } from './service/sample/postup.service'
+import {servicePostup} from './service/sample/postup.service'
 import cluster from 'cluster'
 import os from 'os'
 
 const emitter = new EventEmitter()
 const totCpu = os.cpus().length
-let app = Express()
+const app = Express()
 let server: ServerConfig | undefined
 
 export async function main() {
-    let mainStart = process.hrtime()
+    const mainStart = process.hrtime()
     // environment -----------------------------------------------------------------------------------------------------
     const env = Static.NODE_ENV
     if (env.match('dev|test|stg|stg_bat|prd|prd-bat') === null) {
         throw new Error(`env(${env}) not matches in dev|test|stg|stg_bat|prd|prd-bat`)
     }
     // config.default.env 로드 후 => 환경별 env 파일 로드 하여 덮어씌우기
-    dotenv.config({ path: path.join(__dirname, `./config/config.default.env`) })
+    dotenv.config({path: path.join(__dirname, `./config/config.default.env`)})
     if (fs.existsSync(path.join(__dirname, `./config/config.${env}.env`))) {
         const envConfig = dotenv.parse(fs.readFileSync(path.join(__dirname, `./config/config.${env}.env`)))
         for (const key in envConfig) {
@@ -64,7 +63,7 @@ export async function main() {
                     format: 'YYMMDD:HHmmss.SSS',
                 }),
                 winston.format.printf(info => {
-                    let logLevel = info.level.padEnd(5, ' ')
+                    const logLevel = info.level.padEnd(5, ' ')
                     return `[${info.timestamp}:${logLevel}] ${info.message}`
                     // return `[${chalk.cyan(info.timestamp)}:${logLevel}] ${info.message}`
                 })
@@ -96,7 +95,7 @@ export async function main() {
     if (process.env.NODE_ENV !== 'test') {
         await server.listen()
     }
-    let mainEnd = process.hrtime(mainStart)
+    const mainEnd = process.hrtime(mainStart)
     log.debug(`main end: ${(mainEnd[0] * 1e9 + mainEnd[1]) / 1e9} sec`)
 
     emitter.emit('post')
@@ -108,8 +107,7 @@ emitter.on('post', async () => {
     servicePostup.postUp()
 })
 
-console.log(`IS_CLUSTER: ${process.env['IS_CLUSTER']}`)
-if( process.env['IS_CLUSTER'] === 'true' ) {
+if (process.env['IS_CLUSTER'] === 'true') {
     if (cluster.isPrimary) {
         console.log(`Number of CPUs: ${totCpu}`)
         console.log(`Master pid: ${process.pid}`)
@@ -128,7 +126,7 @@ if( process.env['IS_CLUSTER'] === 'true' ) {
             throw e
         })
     }
-}else {
+} else {
     main().catch(e => {
         log.error(`error occurred at main() ${e}`)
         throw e

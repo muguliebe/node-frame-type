@@ -1,5 +1,4 @@
 declare namespace NodeJS {
-    interface Process {}
     interface ProcessEnv {
         NODE_ENV: string
         MONGO_URL: string

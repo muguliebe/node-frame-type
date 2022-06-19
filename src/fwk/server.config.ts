@@ -32,6 +32,7 @@ export default class ServerConfig {
         this.app = app
         this.setDefault()
         this.setMiddleware()
+        log.debug(`set port:${port}`)
         this.port = port
 
         this.setMongo()
