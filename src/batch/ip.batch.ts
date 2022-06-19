@@ -33,6 +33,10 @@ const taskWrapper = (req: BaseRequest, res: BaseResponse) => {
  * 메인 작업
  */
 const task = () => {
-    const result = ipEvents.emit('update')
-    log.debug(`ip.batch]: ${result}`)
+    try {
+        const result = ipEvents.emit('update')
+        log.debug(`ip.batch]: ${result}`)
+    } catch (e) {
+        log.error(`ip.batch] error occurred: ${e}`)
+    }
 }

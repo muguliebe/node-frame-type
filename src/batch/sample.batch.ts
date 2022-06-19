@@ -8,7 +8,7 @@ import {serviceSample} from '../service/sample/sample.service'
  */
 export const initBatch = (): BatchInitOut => {
     return {
-        schedule: '*/5 * * * *',
+        schedule: '*/5 * * * *', // 5 min
         task: task,
         isUse: true,
     }
@@ -18,8 +18,14 @@ export const initBatch = (): BatchInitOut => {
  * 메인 작업
  */
 const task = async () => {
-    log.debug(`sample.batch`)
-    await serviceSample.save({
-        name: 'what',
-    })
+    log.debug(`sample.batch] start`)
+
+    try {
+        await serviceSample.save({
+            name: 'what',
+        })
+    } catch (e) {
+        log.error(`sample.batch] error occurred: ${e}`)
+    }
+    log.debug(`sample.batch] end`)
 }

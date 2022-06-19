@@ -96,7 +96,7 @@ export default class ServerConfig {
 
     private bindController(controllerPath: string) {
         const controllers = path.join(controllerPath)
-        log.debug(`controller bind start at ${controllers}`)
+        log.debug(`>>>>> controller bind start at ${controllers} <<<<<`)
 
         getAllFiles(controllers)
             .filter(file => file.split('.').pop() === 'ts')
@@ -113,7 +113,7 @@ export default class ServerConfig {
 
     private bindBatch(batchPath: string) {
         const controllers = path.join(batchPath)
-        log.info(`>>>>> batch bind start at ${batchPath}`)
+        log.info(`>>>>> batch bind start at ${batchPath} <<<<<`)
 
         readReadSync(controllers)
             .filter((file: string) => file.split('.').pop() === 'ts')
@@ -136,7 +136,7 @@ export default class ServerConfig {
 
     private bindSubscribeMq(mqPath: string) {
         const controllers = path.join(mqPath)
-        log.info(`>>>>> mq bind start at ${mqPath}`)
+        log.info(`>>>>> mq bind start at ${mqPath} <<<<<`)
 
         readReadSync(controllers)
             .filter((file: string) => file.split('.').pop() === 'ts')
