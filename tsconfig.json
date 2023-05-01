@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "lib": [
+      "es2020"
+    ],
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/types",
+      "./src/types/base"
+    ],
+    "module": "es2020",
+    "rootDir": "src",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": false,
+    "strict": true,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "Node",
+    "declaration": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist/"
+  ],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs",
+      "typeRoots": [
+        "./node_modules/@types",
+        "./src/types",
+        "./src/types/express.d.ts"
+      ],
+    }
+  },
+}

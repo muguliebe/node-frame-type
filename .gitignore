@@ -1,0 +1,15 @@
+.idea
+*.iml
+build/
+dist/
+node_modules/
+.DS_Store
+coverage/
+log/
+undefined/
+yarn-error.log
+tmp/
+src/config/secure/**
+yarn.lock
+package-lock.json
+
