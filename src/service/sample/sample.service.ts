@@ -1,7 +1,7 @@
 import Sample, {ISample} from '../../models/mongo/Sample.model'
 import ServiceProxy from '../../fwk/proxy/service.proxy'
-import DateUtils from "../../utils/DateUtils";
-import {Error} from "mongoose";
+import DateUtils from '../../utils/DateUtils'
+import {Error} from 'mongoose'
 
 class SampleService {
 
@@ -33,19 +33,25 @@ class SampleService {
             rawResult: true
         })
 
-        return Sample.findById(inId);
+        return Sample.findById(inId)
     }
 
     async getByName(input: InGetByName) {
         log.debug(`sampleService] getByName start`)
 
-        const find: InGetByName = {}
+        const find: Find = {}
         if (input.day) find.day = input.day || DateUtils.currentDate()
         if (input.time) find.time = input.time
         if (input.name) find.name = input.name
 
-        const result = await Sample.find(find)
-        log.debug(result)
+        const page: number = input.page >= 1 ? input.page - 1 : 0
+        const size: number = input.size || 1
+        const skip = page * size
+
+        log.debug(`sampleService] page:${page}, size:${size}, skip:${skip}`)
+
+        const result = await Sample.find().or([find]).limit(size).skip(skip)
+
         log.debug(`sampleService] getByName end`)
         return result
     }
@@ -55,10 +61,17 @@ export interface SampleSaveIn {
     name: string
 }
 
-export interface InGetByName {
+export interface Find {
     day?: string
     time?: string
     name?: string
 }
+
+export interface Page {
+    page: number
+    size: number
+}
+
+export type InGetByName = Find & Page
 
 export const serviceSample: SampleService = new Proxy(new SampleService(), ServiceProxy)

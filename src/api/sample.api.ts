@@ -28,6 +28,8 @@ const get = async (req: BaseRequest, res: BaseResponse) => {
         day: req.body.day,
         time: req.body.time,
         name: req.body.name,
+        page: parseInt(req.query.page as string) || 1,
+        size: parseInt(req.query.size as string) || 2
     }
     const result = await serviceSample.getByName(inGetByName)
     res.json(result)
