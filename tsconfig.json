@@ -1,15 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es2020",
-    "lib": [
-      "es2020"
-    ],
+    "target": "es6",
     "typeRoots": [
       "./node_modules/@types",
       "./src/types",
       "./src/types/base"
     ],
-    "module": "es2020",
+    "module": "es6",
     "rootDir": "src",
     "resolveJsonModule": true,
     "allowJs": true,
@@ -22,9 +19,7 @@
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "Node",
-    "declaration": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "declaration": true
   },
   "include": [
     "src/**/*"
@@ -40,7 +35,7 @@
         "./node_modules/@types",
         "./src/types",
         "./src/types/express.d.ts"
-      ],
+      ]
     }
-  },
+  }
 }
