@@ -1,7 +1,6 @@
-// @ts-ignore
 import mongoose from 'mongoose'
-import app from '../../src/server'
 import request from 'supertest'
+import app from '@/server'
 
 beforeAll(async () => {
     global.r = await request(app)

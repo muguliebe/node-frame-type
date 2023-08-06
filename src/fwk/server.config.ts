@@ -14,6 +14,7 @@ import readReadSync from 'recursive-readdir-sync'
 import schedule from 'node-schedule'
 import {BatchInitOut, InitRouterOut} from './base/Base'
 import cluster from 'cluster'
+import AsyncWrapper from '../lib/AsyncWrapper'
 
 export interface ServerConfigIn {
     app: Express.Application
@@ -40,12 +41,13 @@ export default class ServerConfig {
             .catch(e => log.error('mongo init err occurred:', e))
 
         try {
-            this.bindController(apiPath, basePath)
+            this.bindControllerV1(path.join(apiPath, '/v1'), basePath)
+            this.bindControllerV2(path.join(apiPath, '/v2'), basePath)
             if (process.env.NODE_ENV !== 'test') {
                 if (cluster.worker?.id === 1 || process.env['IS_CLUSTER'] === 'false' || process.env['IS_CLUSTER'] === undefined) {
                     this.bindBatch(batchPath)
                 }
-                if( process.env.MQ_USE == 'true' ) {
+                if (process.env.MQ_USE == 'true') {
                     this.bindSubscribeMq(mqPath)
                 }
             }
@@ -97,9 +99,9 @@ export default class ServerConfig {
         }
     }
 
-    private bindController(controllerPath: string, basePath: string) {
+    private bindControllerV1(controllerPath: string, basePath: string) {
         const controllers = path.join(controllerPath)
-        log.debug(`>>>>> controller bind start at ${controllers} <<<<<`)
+        log.debug(`>>>>> controller bind V1 start at ${controllers} <<<<<`)
 
         getAllFiles(controllers)
             .filter(file => file.split('.').pop() === 'ts')
@@ -110,17 +112,77 @@ export default class ServerConfig {
                     // get path from physical file path
                     const relativePath = file.replace(basePath, '')
                     const routeApi = relativePath.split('.')[0]
-                    let route = routeApi.replace('/api', '')
+                    let route = routeApi.replace('/api/v1', '')
 
                     // get from exported router
                     const router = require(file).initRouter() as InitRouterOut
                     route = router?.baseUrl || route
                     this.app.use(route, router.router)
+
                 } catch (err) {
                     throw new Error(`bind err:${file}:${err}`)
                 }
             })
     }
+
+    private bindControllerV2(controllerPath: string, basePath: string) {
+        const controllersV2 = path.join(controllerPath)
+        log.debug(`>>>>> controller bind V2 start at ${controllersV2} <<<<<`)
+
+        getAllFiles(controllersV2)
+            .filter(file => file.split('.').pop() === 'ts')
+            .forEach(file => {
+                try {
+                    log.debug(`route bind: ${file}`)
+
+                    // get path from physical file path
+                    const relativePath = file.replace(basePath, '')
+                    const routeApi = relativePath.split('.')[0]
+                    let route = routeApi.replace('/api/v2', '')
+                    route = route.replace('/route', '')
+
+
+                    // get from exported router
+                    const c = require(file)
+                    const {...exports} = require(file)
+
+                    const names = Object.getOwnPropertyNames(exports)
+                    for (let n of names) {
+                        if (typeof c[n] !== 'function')
+                            continue
+
+                        if (['get', 'post', 'put', 'patch', 'delete'].includes(n.toLowerCase()) == false)
+                            continue
+
+                        log.debug(`bind ${n.toUpperCase()} ${route}`)
+                        const r = this.app.route(route)
+                        const func = AsyncWrapper(c[n])
+                        switch (n.toLowerCase()) {
+                            case 'get':
+                                r.get(func)
+                                break
+                            case 'post':
+                                r.post(func)
+                                break
+                            case 'put':
+                                r.put(func)
+                                break
+                            case 'patch':
+                                r.patch(func)
+                                break
+                            case 'delete':
+                                r.delete(func)
+                                break
+                        }
+                    }
+
+
+                } catch (err) {
+                    throw new Error(`bind err:${file}:${err}`)
+                }
+            })
+    }
+
 
     private bindBatch(batchPath: string) {
         const controllers = path.join(batchPath)

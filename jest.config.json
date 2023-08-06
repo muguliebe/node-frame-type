@@ -1,18 +1,49 @@
 {
-    "preset": "ts-jest",
-    "testEnvironment": "node",
-    "collectCoverage": true,
-    "coveragePathIgnorePatterns": ["<rootDir>/tmp", "<rootDir>/src/server.ts","<rootDir>/src/fwk/*", "<rootDir>/src/utils/DateUtils.ts"],
-    "moduleFileExtensions": ["js", "mjs", "ts"],
-    "transform": {
-        "^.+\\.js$": "babel-jest",
-        "^.+\\.mjs$": "babel-jest",
-        "^.+\\.ts$": "ts-jest"
-    },
-    "testRegex": "((\\.|/*.)(test))\\.ts?$",
-    "modulePathIgnorePatterns": ["<rootDir>/tmp", "<rootDir>/test/norm", "<rootDir>/test/http"],
-    "setupFilesAfterEnv": ["<rootDir>/test/unit/setup.ts"],
-    "globals": {
-        "r": {}
-    }
+  "preset": "ts-jest",
+  "testEnvironment": "node",
+  "collectCoverage": true,
+  "coveragePathIgnorePatterns": [
+    "<rootDir>/tmp",
+    "<rootDir>/src/server.ts",
+    "<rootDir>/src/fwk/*",
+    "<rootDir>/src/utils/DateUtils.ts"
+  ],
+  "moduleFileExtensions": [
+    "js",
+    "mjs",
+    "ts"
+  ],
+  "transform": {
+    "^.+\\.js$": "babel-jest",
+    "^.+\\.mjs$": "babel-jest",
+    "^.+\\.ts$": [
+      "ts-jest",
+      {
+        "rootDir": ".",
+        "compilerOptions": {
+          "module": "commonjs",
+          "typeRoots": [
+            "./node_modules/@types",
+            "./src/types",
+            "./src/types/express.d.ts"
+          ]
+        }
+      }
+    ]
+  },
+  "testRegex": "((\\.|/*.)(test))\\.ts?$",
+  "modulePathIgnorePatterns": [
+    "<rootDir>/tmp",
+    "<rootDir>/test/norm",
+    "<rootDir>/test/http"
+  ],
+  "setupFilesAfterEnv": [
+    "<rootDir>/test/unit/setup.ts"
+  ],
+  "globals": {
+    "r": {}
+  },
+  "moduleNameMapper": {
+    "@/(.*)$": "<rootDir>/src/$1"
+  }
 }

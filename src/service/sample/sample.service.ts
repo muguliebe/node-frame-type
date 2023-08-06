@@ -44,7 +44,7 @@ class SampleService {
         if (input.time) find.time = input.time
         if (input.name) find.name = input.name
 
-        const page: number = input.page >= 1 ? input.page - 1 : 0
+        const page: number = input.page && input.page >= 1 ? input.page - 1 : 0
         const size: number = input.size || 1
         const skip = page * size
 
@@ -68,8 +68,8 @@ export interface Find {
 }
 
 export interface Page {
-    page: number
-    size: number
+    page?: number
+    size?: number
 }
 
 export type InGetByName = Find & Page

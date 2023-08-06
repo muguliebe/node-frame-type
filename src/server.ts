@@ -1,3 +1,4 @@
+import './paths'
 import ServerConfig, {ServerConfigIn} from './fwk/server.config'
 import * as winston from 'winston'
 import * as logging from './lib/logger'
@@ -12,10 +13,12 @@ import {servicePostup} from './service/sample/postup.service'
 import cluster from 'cluster'
 import os from 'os'
 
+
 const emitter = new EventEmitter()
 const totCpu = os.cpus().length
 const app = Express()
 let server: ServerConfig | undefined
+
 
 export async function main() {
     const mainStart = process.hrtime()

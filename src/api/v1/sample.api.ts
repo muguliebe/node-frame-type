@@ -1,8 +1,8 @@
 import {Router} from 'express'
-import {InitRouterOut} from '../fwk/base/Base'
-import AsyncWrapper from '../lib/asyncWrapper'
-import {BaseRequest, BaseResponse} from '../types/base'
-import {InGetByName, SampleSaveIn, serviceSample} from '../service/sample/sample.service'
+import {InitRouterOut} from '@/fwk/base/Base'
+import {BaseRequest, BaseResponse} from '@/types/base'
+import {InGetByName, SampleSaveIn, serviceSample} from '@/service/sample/sample.service'
+import AsyncWrapper from '../../lib/AsyncWrapper'
 
 // initialize
 const router = Router()
@@ -17,7 +17,7 @@ export const initRouter = (): InitRouterOut => {
     }
 
     router.get('/', AsyncWrapper(get))
-    router.post('/', AsyncWrapper(save))
+    router.post('/', AsyncWrapper(post))
     router.put('/:id', AsyncWrapper(put))
 
     return thisRouter
@@ -35,7 +35,7 @@ const get = async (req: BaseRequest, res: BaseResponse) => {
     res.json(result)
 }
 
-const save = async (req: BaseRequest, res: BaseResponse) => {
+const post = async (req: BaseRequest, res: BaseResponse) => {
     const inSave: SampleSaveIn = {
         name: req.body.name,
     }
@@ -60,4 +60,4 @@ const put = async (req: BaseRequest, res: BaseResponse) => {
     res.status(200).end()
 }
 
-export default this
+export default router

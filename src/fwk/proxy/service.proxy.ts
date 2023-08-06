@@ -1,5 +1,3 @@
-import { BaseRequest } from '../../types/base'
-
 export const ServiceProxy = {
     get(target, property, receiver) {
         if (typeof target[property] === 'function') {

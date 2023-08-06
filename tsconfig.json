@@ -6,6 +6,12 @@
       "./src/types",
       "./src/types/base"
     ],
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": [
+        "*"
+      ]
+    },
     "module": "es6",
     "rootDir": "src",
     "resolveJsonModule": true,
@@ -22,7 +28,8 @@
     "declaration": true
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "test/**/*"
   ],
   "exclude": [
     "node_modules",

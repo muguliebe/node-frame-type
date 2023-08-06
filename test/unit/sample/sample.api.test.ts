@@ -1,4 +1,4 @@
-import {InGetByName, SampleSaveIn} from '../../../src/service/sample/sample.service'
+import {InGetByName, SampleSaveIn} from '@/service/sample/sample.service'
 
 describe('/sam', () => {
     test('POST /sam', async () => {
