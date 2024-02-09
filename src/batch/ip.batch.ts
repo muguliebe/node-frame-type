@@ -1,6 +1,6 @@
 import {Router} from 'express'
-import {ipEvents} from '../subscriber/event/ip.event'
-import {BaseRequest, BaseResponse} from '../types/base'
+import {ipEvents} from '@/subscriber/event/ip.event'
+import {BaseRequest, BaseResponse} from '@/types/base'
 
 // initialize
 const router = Router()

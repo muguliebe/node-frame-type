@@ -2,7 +2,7 @@ import {Router} from 'express'
 import {InitRouterOut} from '@/fwk/base/Base'
 import {BaseRequest, BaseResponse} from '@/types/base'
 import {InGetByName, SampleSaveIn, serviceSample} from '@/service/sample/sample.service'
-import AsyncWrapper from '../../lib/AsyncWrapper'
+import AsyncWrapper from '@/lib/AsyncWrapper'
 
 // initialize
 const router = Router()

@@ -1,6 +1,6 @@
-import Sample, {ISample} from '../../models/mongo/Sample.model'
-import ServiceProxy from '../../fwk/proxy/service.proxy'
-import DateUtils from '../../utils/DateUtils'
+import Sample, {ISample} from '@/models/mongo/Sample.model'
+import ServiceProxy from '@/fwk/proxy/service.proxy'
+import DateUtils from '@/utils/DateUtils'
 import {Error} from 'mongoose'
 
 class SampleService {

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import CommonArea from '../../models/entity/commonArea'
+import CommonArea from '@/models/entity/commonArea'
 
 export interface BaseRequest extends Request {
     gid?: string

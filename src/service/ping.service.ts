@@ -1,5 +1,5 @@
 import {serviceIp} from './sample/ip.service'
-import ServiceProxy from '../fwk/proxy/service.proxy'
+import ServiceProxy from '@/fwk/proxy/service.proxy'
 
 export class PingService {
     #msg = 'pong'

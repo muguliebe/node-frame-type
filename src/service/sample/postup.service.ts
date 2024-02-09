@@ -1,4 +1,4 @@
-import ServiceProxy from '../../fwk/proxy/service.proxy'
+import ServiceProxy from '@/fwk/proxy/service.proxy'
 
 export default class PostupService {
     postUp() {

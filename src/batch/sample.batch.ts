@@ -1,5 +1,5 @@
-import {BatchInitOut} from '../fwk/base/Base'
-import {serviceSample} from '../service/sample/sample.service'
+import {BatchInitOut} from '@/fwk/base/Base'
+import {serviceSample} from '@/service/sample/sample.service'
 
 // initialize
 

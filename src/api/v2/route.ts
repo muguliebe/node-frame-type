@@ -1,5 +1,5 @@
-import {BaseRequest, BaseResponse} from '../../types/base'
-import {InGetByName, SampleSaveIn, serviceSample} from '../../service/sample/sample.service'
+import {BaseRequest, BaseResponse} from '@/types/base'
+import {InGetByName, SampleSaveIn, serviceSample} from '@/service/sample/sample.service'
 
 export const get = async (req: BaseRequest, res: BaseResponse) => {
     const inGetByName: InGetByName = {
