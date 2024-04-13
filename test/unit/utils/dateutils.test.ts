@@ -1,5 +1,4 @@
 import DateUtils from '../../../src/utils/DateUtils'
-import exp = require('constants')
 
 describe('DateUtils', () => {
     test('format', () => {
