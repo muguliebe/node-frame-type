@@ -10,7 +10,7 @@ import {format} from 'date-fns'
 import {BaseRequest, BaseResponse} from '../../types/base'
 import amqp from 'amqplib'
 import limit from 'simple-rate-limiter'
-import Static from "../../lib/static";
+import Static from '../../lib/static'
 
 const osHostname = os.hostname()
 
@@ -63,17 +63,17 @@ const getActualRequestDurationInMilliseconds = (start: [number, number]) => {
     return (diff[0] * NS_PER_SEC + diff[1]) / NS_TO_MS
 }
 
-const getIp = (req: Request) => {
-    let ip: string | string[] | Address4 | undefined
+const getIp = (req: Request): string => {
+    let ip
     if (req.headers['x-forwarded-for']) {
         ip = req.headers['x-forwarded-for']
     } else {
-        ip = new Address6(req.ip).address4
+        ip = new Address6(req.ip || '').address4
     }
     try {
         if (!ip) {
             ip = req.ip
-            if (ip.toString() === '::1') {
+            if (ip!.toString() === '::1') {
                 ip = '127.0.0.1'
             }
         } else {
@@ -142,7 +142,7 @@ async function setQueue() {
         channel = await connection.createConfirmChannel()
         await channel.assertExchange(exchange, 'topic', {durable: true})
     } catch (e) {
-        log.error("when connect mq")
+        log.error('when connect mq')
         throw e
     }
 }
