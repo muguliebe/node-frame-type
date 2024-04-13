@@ -8,13 +8,13 @@ import path from 'path'
 import {getAllFiles} from '../utils/zutils'
 import allAdvice from './middleware/allAdvice'
 import mongoose, {ConnectOptions} from 'mongoose'
-import errorMiddleware from './middleware/error.middleware'
 import notFoundErrorMiddleware from './middleware/not-found-error.middleware'
 import readReadSync from 'recursive-readdir-sync'
 import schedule from 'node-schedule'
 import {BatchInitOut, InitRouterOut} from './base/Base'
 import cluster from 'cluster'
 import AsyncWrapper from '../lib/AsyncWrapper'
+import errorMiddleware from '@/fwk/middleware/error.middleware'
 
 export interface ServerConfigIn {
     app: Express.Application
