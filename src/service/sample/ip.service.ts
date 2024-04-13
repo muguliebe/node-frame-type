@@ -1,6 +1,7 @@
 import axios from 'axios'
-import ServiceProxy from '@/fwk/proxy/service.proxy'
+import service from '@/fwk/decorator/service.decorator'
 
+@service
 export class IpService {
     async getIp(): Promise<string> {
         const ip = await axios.get('https://ifconfig.me')
@@ -8,4 +9,4 @@ export class IpService {
     }
 }
 
-export const serviceIp: IpService = new Proxy(new IpService(), ServiceProxy)
+export const serviceIp = new IpService()

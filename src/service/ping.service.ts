@@ -1,6 +1,7 @@
 import {serviceIp} from './sample/ip.service'
-import ServiceProxy from '@/fwk/proxy/service.proxy'
+import service from '@/fwk/decorator/service.decorator'
 
+@service
 export class PingService {
     #msg = 'pong'
 
@@ -21,4 +22,5 @@ interface PingOut {
     msg: string
 }
 
-export const servicePing: PingService = new Proxy(new PingService(), ServiceProxy)
+// export const servicePing: PingService = new Proxy(new PingService(), ServiceProxy)
+export const servicePing = new PingService()

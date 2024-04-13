@@ -118,6 +118,7 @@ export default class ServerConfig {
                     const router = require(file).initRouter() as InitRouterOut
                     route = router?.baseUrl || route
                     this.app.use(route, router.router)
+                    log.debug(`bind route: ${route}`)
 
                 } catch (err) {
                     throw new Error(`bind err:${file}:${err}`)

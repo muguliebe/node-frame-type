@@ -1,8 +1,9 @@
 import Sample, {ISample} from '@/models/mongo/Sample.model'
-import ServiceProxy from '@/fwk/proxy/service.proxy'
 import DateUtils from '@/utils/DateUtils'
 import {Error} from 'mongoose'
+import service from '@/fwk/decorator/service.decorator'
 
+@service
 class SampleService {
 
     async save(inSave: SampleSaveIn): Promise<ISample> {
@@ -74,4 +75,5 @@ export interface Page {
 
 export type InGetByName = Find & Page
 
-export const serviceSample: SampleService = new Proxy(new SampleService(), ServiceProxy)
+// export const serviceSample: SampleService = new Proxy(new SampleService(), ServiceProxy)
+export const serviceSample = new SampleService()

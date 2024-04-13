@@ -14,6 +14,8 @@
     },
     "module": "es6",
     "rootDir": "src",
+    "strictPropertyInitialization": false,
+    "experimentalDecorators": true,
     "resolveJsonModule": true,
     "allowJs": true,
     "outDir": "dist",

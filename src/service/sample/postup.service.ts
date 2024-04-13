@@ -1,9 +1,10 @@
-import ServiceProxy from '@/fwk/proxy/service.proxy'
+import service from '@/fwk/decorator/service.decorator'
 
+@service
 export default class PostupService {
     postUp() {
         log.debug('post up called')
     }
 }
 
-export const servicePostup = new Proxy(new PostupService(), ServiceProxy)
+export const servicePostup = new PostupService()
