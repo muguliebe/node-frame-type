@@ -23,17 +23,18 @@ jobs:
     - name: checkout
       uses: actions/checkout@v4
 
+    - uses: pnpm/action-setup@v3
+      name: Install pnpm
+      with:
+        version: 8
+        run_install: false
+
     - name: Use Node ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'pnpm'
 
-    - uses: pnpm/action-setup@v3
-      name: Install pnpm
-      with:
-        version: 8
-        run_install: false
 
     - name: Get pnpm store directory
       shell: bash
