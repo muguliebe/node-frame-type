@@ -35,6 +35,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'pnpm'
 
+    - name: Load Environment Variables
+      run: |
+        echo "MQ_URL=${{ secrets.MQ_URL }}" >> $GITHUB_ENV
+        echo "MONGO_URL=${{ secrets.MONGO_URL }}" >> $GITHUB_ENV
+        echo "MONGO_URL_ATLAS=${{ secrets.MONGO_URL_ATLAS }}" >> $GITHUB_ENV
 
     - name: Get pnpm store directory
       shell: bash
