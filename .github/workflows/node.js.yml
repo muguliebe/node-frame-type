@@ -41,8 +41,8 @@ jobs:
       run: |
         echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-    - uses: actions/cache@v4
-      name: Setup pnpm cache
+    - name: Setup pnpm cache
+      uses: actions/cache@v4
       with:
         path: ${{ env.STORE_PATH }}
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -52,3 +52,17 @@ jobs:
     - run: pnpm i --frozen-lockfile
     - run: pnpm run build
     - run: npm test
+
+    - name: Archive Source
+      run: zip -r source.zip .
+
+    - name: Upload Source Archive to SFTP
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.SFTP_HOST }}
+        username: ${{ secrets.SFTP_USERNAME }}
+        key: ${{ secrets.SFTP_KEY }}
+        port: ${{ secrets.SFTP_PORT }}
+        source: "source.zip"
+        target: "/deploy/node-frame-type"
+
