@@ -41,8 +41,7 @@ export default class ServerConfig {
             .catch(e => log.error('mongo init err occurred:', e))
 
         try {
-            this.bindControllerV1(path.join(apiPath, '/v1'), basePath)
-            this.bindControllerV2(path.join(apiPath, '/v2'), basePath)
+            this.bindController(apiPath, basePath)
             if (process.env.NODE_ENV !== 'test') {
                 if (cluster.worker?.id === 1 || process.env['IS_CLUSTER'] === 'false' || process.env['IS_CLUSTER'] === undefined) {
                     this.bindBatch(batchPath)
@@ -99,9 +98,10 @@ export default class ServerConfig {
         }
     }
 
-    private bindControllerV1(controllerPath: string, basePath: string) {
+
+    private bindController(controllerPath: string, basePath: string) {
         const controllers = path.join(controllerPath)
-        log.debug(`>>>>> controller bind V1 start at ${controllers} <<<<<`)
+        log.debug(`>>>>> controller bind start at ${controllers} <<<<<`)
 
         getAllFiles(controllers)
             .filter(file => file.split('.').pop() === 'ts')
@@ -112,34 +112,7 @@ export default class ServerConfig {
                     // get path from physical file path
                     const relativePath = file.replace(basePath, '')
                     const routeApi = relativePath.split('.')[0]
-                    let route = routeApi.replace('/api/v1', '')
-
-                    // get from exported router
-                    const router = require(file).initRouter() as InitRouterOut
-                    route = router?.baseUrl || route
-                    this.app.use(route, router.router)
-                    log.debug(`bind route: ${route}`)
-
-                } catch (err) {
-                    throw new Error(`bind err:${file}:${err}`)
-                }
-            })
-    }
-
-    private bindControllerV2(controllerPath: string, basePath: string) {
-        const controllersV2 = path.join(controllerPath)
-        log.debug(`>>>>> controller bind V2 start at ${controllersV2} <<<<<`)
-
-        getAllFiles(controllersV2)
-            .filter(file => file.split('.').pop() === 'ts')
-            .forEach(file => {
-                try {
-                    log.debug(`route bind: ${file}`)
-
-                    // get path from physical file path
-                    const relativePath = file.replace(basePath, '')
-                    const routeApi = relativePath.split('.')[0]
-                    let route = routeApi.replace('/api/v2', '')
+                    let route = routeApi.replace('/api', '')
                     route = route.replace('/route', '')
 
 
