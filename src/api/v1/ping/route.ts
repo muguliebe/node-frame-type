@@ -1,5 +1,5 @@
 import {BaseRequest, BaseResponse} from '@/types/base'
-import {servicePing} from '@/service/ping.service'
+import {servicePing} from '@/service/core/ping.service'
 
 export const get = async (req: BaseRequest, res: BaseResponse) => {
     const result = await servicePing.ping()

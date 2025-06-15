@@ -1,10 +1,10 @@
 // noinspection DuplicatedCode
 
 import {NextFunction, Request, Response} from 'express'
-import Transaction from '../../models/mongo/Transaction.model'
+import Transaction from '../../models/mongodb/Transaction.model'
 import {Address4, Address6} from 'ip-address'
 import {v4 as uuidv4} from 'uuid'
-import CommonArea from '../../models/entity/commonArea'
+import CommonArea from '../../models/entities/commonArea'
 import os from 'os'
 import {format} from 'date-fns'
 import {BaseRequest, BaseResponse} from '../../types/base'

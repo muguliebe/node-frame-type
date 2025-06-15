@@ -1,7 +1,7 @@
 import { EventEmitter } from 'tsee'
-import IpModels from '@/models/mongo/Ip.models'
+import IpModels from '@/models/mongodb/Ip.models'
 import DateUtils from '@/utils/DateUtils'
-import { serviceIp } from '@/service/sample/ip.service'
+import { serviceIp } from '@/service/external/ip.service'
 
 export const ipEvents = new EventEmitter<{
     update: (ip?: string) => void

@@ -9,7 +9,7 @@ import fs from 'fs'
 import dotenv from 'dotenv'
 import EventEmitter from 'events'
 import Express from 'express'
-import {servicePostup} from '@/service/sample/postup.service'
+import {servicePostup} from '@/service/core/sample/postup.service'
 import cluster from 'cluster'
 import os from 'os'
 
@@ -28,9 +28,9 @@ export async function main() {
         throw new Error(`env(${env}) not matches in dev|test|stg|stg_bat|prd|prd-bat`)
     }
     // config.default.env 로드 후 => 환경별 env 파일 로드 하여 덮어씌우기
-    dotenv.config({path: path.join(__dirname, `./config/config.default.env`)})
-    if (fs.existsSync(path.join(__dirname, `./config/config.${env}.env`))) {
-        const envConfig = dotenv.parse(fs.readFileSync(path.join(__dirname, `./config/config.${env}.env`)))
+    dotenv.config({path: path.join(__dirname, `./config/environments/config.default.env`)})
+    if (fs.existsSync(path.join(__dirname, `./config/environments/config.${env}.env`))) {
+        const envConfig = dotenv.parse(fs.readFileSync(path.join(__dirname, `./config/environments/config.${env}.env`)))
         for (const key in envConfig) {
             process.env[key] = envConfig[key]
         }
@@ -41,9 +41,9 @@ export async function main() {
     let bExistSecure = false
 
     for (const ep of envPlus) {
-        if (fs.existsSync(path.join(__dirname, `./config/secure/config.${ep}.env`))) {
+        if (fs.existsSync(path.join(__dirname, `./config/environments/secure/config.${ep}.env`))) {
             const envSecureConfig = dotenv.parse(
-                fs.readFileSync(path.join(__dirname, `./config/secure/config.${ep}.env`))
+                fs.readFileSync(path.join(__dirname, `./config/environments/secure/config.${ep}.env`))
             )
             for (const key in envSecureConfig) {
                 process.env[key] = envSecureConfig[key]

@@ -1,4 +1,4 @@
-import Sample, {ISample} from '@/models/mongo/Sample.model'
+import Sample, {ISample} from '@/models/mongodb/Sample.model'
 import DateUtils from '@/utils/DateUtils'
 import {Error} from 'mongoose'
 import service from '@/fwk/decorator/service.decorator'

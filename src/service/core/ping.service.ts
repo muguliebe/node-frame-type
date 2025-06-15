@@ -1,4 +1,4 @@
-import {serviceIp} from './sample/ip.service'
+import {serviceIp} from '../external/ip.service'
 import service from '@/fwk/decorator/service.decorator'
 
 @service
