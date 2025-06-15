@@ -1,3 +1,4 @@
+import 'reflect-metadata'
 import './paths'
 import ServerConfig, {ServerConfigIn} from '@/fwk/server.config'
 import * as winston from 'winston'
@@ -90,7 +91,6 @@ export async function main() {
     // run server ------------------------------------------------------------------------------------------------------
     server = new ServerConfig(<ServerConfigIn>{
         app: app,
-        apiPath: path.join(__dirname, './api'),
         batchPath: path.join(__dirname, './batch'),
         mqPath: path.join(__dirname, './subscriber/mq'),
         port: process.env.PORT || 3000,

@@ -1,0 +1,525 @@
+{
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"UserResponse": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"createdAt": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"email",
+					"createdAt"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UsersListResponse": {
+				"properties": {
+					"users": {
+						"items": {
+							"$ref": "#/components/schemas/UserResponse"
+						},
+						"type": "array"
+					},
+					"total": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"users",
+					"total"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ErrorResponse": {
+				"properties": {
+					"msg": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"msg"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserResponseV2": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"fullName": {
+						"type": "string"
+					},
+					"emailAddress": {
+						"type": "string"
+					},
+					"created": {
+						"type": "string"
+					},
+					"version": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"fullName",
+					"emailAddress",
+					"created",
+					"version"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateUserResponse": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"createdAt": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"email",
+					"createdAt",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateUserRequest": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name",
+					"email"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"SampleResponse": {
+				"properties": {
+					"msg": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"msg"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"SampleInput": {
+				"properties": {
+					"name": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"PingResponse": {
+				"properties": {
+					"msg": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"msg"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"HealthResponse": {
+				"properties": {
+					"status": {
+						"type": "string",
+						"enum": [
+							"OK",
+							"ERROR"
+						]
+					},
+					"timestamp": {
+						"type": "string"
+					},
+					"uptime": {
+						"type": "number",
+						"format": "double"
+					},
+					"version": {
+						"type": "string"
+					},
+					"environment": {
+						"type": "string"
+					},
+					"services": {
+						"properties": {
+							"postgresql": {
+								"type": "boolean"
+							},
+							"mongodb": {
+								"type": "boolean"
+							},
+							"ping": {
+								"properties": {
+									"msg": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"msg"
+								],
+								"type": "object"
+							}
+						},
+						"required": [
+							"postgresql",
+							"mongodb",
+							"ping"
+						],
+						"type": "object"
+					}
+				},
+				"required": [
+					"status",
+					"timestamp",
+					"uptime",
+					"version",
+					"environment",
+					"services"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {}
+	},
+	"info": {
+		"title": "Node Frame Type API",
+		"version": "1.0.0",
+		"description": "A comprehensive Node.js TypeScript API framework",
+		"license": {
+			"name": "ISC"
+		},
+		"contact": {
+			"name": "API Support",
+			"email": "support@example.com"
+		}
+	},
+	"paths": {
+		"/users": {
+			"get": {
+				"operationId": "GetUsers",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/UsersListResponse"
+										},
+										{
+											"$ref": "#/components/schemas/ErrorResponse"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "Get all users\nReturns list of users with optional key parameter",
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "key",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"post": {
+				"operationId": "CreateUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CreateUserResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Create new user\nCreates a new user in the database",
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateUserRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/{userId}": {
+			"get": {
+				"operationId": "GetUserById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/UserResponse"
+										},
+										{
+											"$ref": "#/components/schemas/UserResponseV2"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "Get user by ID\nReturns specific user information by user ID\nSupports version negotiation via Accept header",
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "header",
+						"name": "accept",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/samples": {
+			"get": {
+				"operationId": "GetSample",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SampleResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get sample data\nReturns sample response data",
+				"tags": [
+					"Sample"
+				],
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CreateSample",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SampleResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Create sample data\nCreates new sample data with provided input",
+				"tags": [
+					"Sample"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/SampleInput"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/ping": {
+			"get": {
+				"operationId": "Ping",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PingResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Ping endpoint\nSimple ping endpoint that returns pong",
+				"tags": [
+					"Ping"
+				],
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "GetExternalIp",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"ip": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"ip"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get external IP\nReturns the server's external IP address",
+				"tags": [
+					"Ping"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/health": {
+			"get": {
+				"operationId": "GetHealth",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HealthResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get system health status\nReturns comprehensive health information including service status and connectivity",
+				"tags": [
+					"Health"
+				],
+				"security": [],
+				"parameters": []
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "https://[object Object]/"
+		}
+	],
+	"tags": [
+		{
+			"name": "Health",
+			"description": "System health and status endpoints"
+		},
+		{
+			"name": "Ping",
+			"description": "Ping and connectivity endpoints"
+		},
+		{
+			"name": "Sample",
+			"description": "Sample data operations"
+		},
+		{
+			"name": "Users",
+			"description": "User management operations"
+		}
+	]
+}

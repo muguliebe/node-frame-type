@@ -1,0 +1,43 @@
+### 사용자 생성 테스트
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+  "name": "테스트 유저",
+  "email": "test@example.com"
+}
+
+### 사용자 생성 테스트 2
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+  "name": "Jane Doe", 
+  "email": "jane@example.com"
+}
+
+### 모든 사용자 조회
+GET http://localhost:3000/users
+
+### 특정 사용자 조회 (V1)
+GET http://localhost:3000/users/1
+Accept: application/json
+
+### 특정 사용자 조회 (V2 - 헤더 버전관리)
+GET http://localhost:3000/users/1
+Accept: application/vnd.api.v2+json
+
+### 중복 이메일 테스트
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+  "name": "중복 테스트",
+  "email": "test@example.com"
+}
+
+### Swagger 문서 확인
+GET http://localhost:3000/api-docs.json
+
+### Health Check
+GET http://localhost:3000/health

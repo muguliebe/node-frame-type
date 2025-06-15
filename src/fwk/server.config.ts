@@ -5,7 +5,6 @@ import cors from 'cors'
 import bodyParser from 'body-parser'
 import helmet from 'helmet'
 import path from 'path'
-import {getAllFiles} from '../utils/zutils'
 import allAdvice from './middleware/allAdvice'
 import mongoose, {ConnectOptions} from 'mongoose'
 import notFoundErrorMiddleware from './middleware/not-found-error.middleware'
@@ -13,13 +12,14 @@ import readReadSync from 'recursive-readdir-sync'
 import schedule from 'node-schedule'
 import {BatchInitOut, InitRouterOut} from './base/Base'
 import cluster from 'cluster'
-import AsyncWrapper from '../lib/AsyncWrapper'
 import errorMiddleware from '@/fwk/middleware/error.middleware'
+import swaggerUi from 'swagger-ui-express'
+import * as fs from 'fs'
+import { RegisterRoutes } from '@/generated/routes'
 
 export interface ServerConfigIn {
     app: Express.Application
     port: number
-    apiPath: string
     batchPath: string
     mqPath: string
     basePath: string
@@ -29,10 +29,11 @@ export default class ServerConfig {
     app: Express.Application
     port: number
 
-    constructor({app, port = 3000, apiPath, batchPath, mqPath, basePath}: ServerConfigIn) {
+    constructor({app, port = 3000, batchPath, mqPath, basePath}: ServerConfigIn) {
         this.app = app
         this.setDefault()
         this.setMiddleware()
+        this.setSwagger()
         log.debug(`set port:${port}`)
         this.port = port
 
@@ -41,7 +42,9 @@ export default class ServerConfig {
             .catch(e => log.error('mongo init err occurred:', e))
 
         try {
-            this.bindController(apiPath, basePath)
+            // Register tsoa routes
+            RegisterRoutes(this.app)
+            
             if (process.env.NODE_ENV !== 'test') {
                 if (cluster.worker?.id === 1 || process.env['IS_CLUSTER'] === 'false' || process.env['IS_CLUSTER'] === undefined) {
                     this.bindBatch(batchPath)
@@ -68,6 +71,26 @@ export default class ServerConfig {
 
     private setMiddleware() {
         this.app.use(allAdvice)
+    }
+
+    private setSwagger() {
+        // Load generated swagger spec
+        const swaggerSpec = JSON.parse(fs.readFileSync(path.join(__dirname, '../generated/swagger.json'), 'utf8'))
+        
+        // Swagger JSON endpoint
+        this.app.get('/api-docs.json', (req, res) => {
+            res.setHeader('Content-Type', 'application/json')
+            res.send(swaggerSpec)
+        })
+
+        // Swagger UI
+        this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+            explorer: true,
+            customCss: '.swagger-ui .topbar { display: none }',
+            customSiteTitle: 'Node Frame Type API Documentation'
+        }))
+
+        log.debug('Swagger documentation available at /api-docs')
     }
 
     async setMongo() {
@@ -99,63 +122,6 @@ export default class ServerConfig {
     }
 
 
-    private bindController(controllerPath: string, basePath: string) {
-        const controllers = path.join(controllerPath)
-        log.debug(`>>>>> controller bind start at ${controllers} <<<<<`)
-
-        getAllFiles(controllers)
-            .filter(file => file.split('.').pop() === 'ts')
-            .forEach(file => {
-                try {
-                    log.debug(`route bind: ${file}`)
-
-                    // get path from physical file path
-                    const relativePath = file.replace(basePath, '')
-                    const routeApi = relativePath.split('.')[0]
-                    let route = routeApi.replace('/api', '')
-                    route = route.replace('/route', '')
-
-
-                    // get from exported router
-                    const c = require(file)
-                    const {...exports} = require(file)
-
-                    const names = Object.getOwnPropertyNames(exports)
-                    for (let n of names) {
-                        if (typeof c[n] !== 'function')
-                            continue
-
-                        if (['get', 'post', 'put', 'patch', 'delete'].includes(n.toLowerCase()) == false)
-                            continue
-
-                        log.debug(`bind ${n.toUpperCase()} ${route}`)
-                        const r = this.app.route(route)
-                        const func = AsyncWrapper(c[n])
-                        switch (n.toLowerCase()) {
-                            case 'get':
-                                r.get(func)
-                                break
-                            case 'post':
-                                r.post(func)
-                                break
-                            case 'put':
-                                r.put(func)
-                                break
-                            case 'patch':
-                                r.patch(func)
-                                break
-                            case 'delete':
-                                r.delete(func)
-                                break
-                        }
-                    }
-
-
-                } catch (err) {
-                    throw new Error(`bind err:${file}:${err}`)
-                }
-            })
-    }
 
 
     private bindBatch(batchPath: string) {

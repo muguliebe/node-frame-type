@@ -1,0 +1,43 @@
+{
+  "entryFile": "src/app.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": ["src/controllers/**/*Controller.ts"],
+  "spec": {
+    "outputDirectory": "src/generated",
+    "specVersion": 3,
+    "name": "Node Frame Type API",
+    "description": "A comprehensive Node.js TypeScript API framework",
+    "version": "1.0.0",
+    "contact": {
+      "name": "API Support",
+      "email": "support@example.com"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3000",
+        "description": "Development server"
+      }
+    ],
+    "tags": [
+      {
+        "name": "Health",
+        "description": "System health and status endpoints"
+      },
+      {
+        "name": "Ping",
+        "description": "Ping and connectivity endpoints"
+      },
+      {
+        "name": "Sample",
+        "description": "Sample data operations"
+      },
+      {
+        "name": "Users",
+        "description": "User management operations"
+      }
+    ]
+  },
+  "routes": {
+    "routesDir": "src/generated"
+  }
+}
