@@ -4,13 +4,13 @@
 import type { TsoaRoute } from '@tsoa/runtime';
 import {  fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { UsersController } from './../controllers/user/UsersController';
+import { UsersController } from './../parts/user/controller/UsersController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { SampleController } from './../controllers/sample/SampleController';
+import { SampleController } from './../parts/sample/controller/SampleController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { PingController } from './../controllers/ping/PingController';
+import { HealthController } from './../parts/health/controller/HealthController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { HealthController } from './../controllers/health/HealthController';
+import { PingController } from './../parts/com/controller/PingController';
 import type { Request as ExRequest, Response as ExResponse, RequestHandler, Router } from 'express';
 
 
@@ -95,14 +95,6 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "PingResponse": {
-        "dataType": "refObject",
-        "properties": {
-            "msg": {"dataType":"string","required":true},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "HealthResponse": {
         "dataType": "refObject",
         "properties": {
@@ -112,6 +104,14 @@ const models: TsoaRoute.Models = {
             "version": {"dataType":"string","required":true},
             "environment": {"dataType":"string","required":true},
             "services": {"dataType":"nestedObjectLiteral","nestedProperties":{"postgresql":{"dataType":"boolean","required":true},"mongodb":{"dataType":"boolean","required":true},"ping":{"dataType":"nestedObjectLiteral","nestedProperties":{"msg":{"dataType":"string","required":true}},"required":true}},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "PingResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "msg": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -283,6 +283,35 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsHealthController_getHealth: Record<string, TsoaRoute.ParameterSchema> = {
+        };
+        app.get('/health',
+            ...(fetchMiddlewares<RequestHandler>(HealthController)),
+            ...(fetchMiddlewares<RequestHandler>(HealthController.prototype.getHealth)),
+
+            async function HealthController_getHealth(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsHealthController_getHealth, request, response });
+
+                const controller = new HealthController();
+
+              await templateService.apiHandler({
+                methodName: 'getHealth',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsPingController_ping: Record<string, TsoaRoute.ParameterSchema> = {
         };
         app.get('/ping',
@@ -330,35 +359,6 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'getExternalIp',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-              });
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        const argsHealthController_getHealth: Record<string, TsoaRoute.ParameterSchema> = {
-        };
-        app.get('/health',
-            ...(fetchMiddlewares<RequestHandler>(HealthController)),
-            ...(fetchMiddlewares<RequestHandler>(HealthController.prototype.getHealth)),
-
-            async function HealthController_getHealth(request: ExRequest, response: ExResponse, next: any) {
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = templateService.getValidatedArgs({ args: argsHealthController_getHealth, request, response });
-
-                const controller = new HealthController();
-
-              await templateService.apiHandler({
-                methodName: 'getHealth',
                 controller,
                 response,
                 next,

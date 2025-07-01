@@ -2,9 +2,9 @@ import mongoose from 'mongoose'
 import mongoosePaginate from 'mongoose-paginate-v2'
 
 export interface ISample {
-    day: string;
-    time: string;
-    name: string;
+    day: string
+    time: string
+    name: string
 }
 
 const sampleSchema = new mongoose.Schema<ISample>(
@@ -13,7 +13,7 @@ const sampleSchema = new mongoose.Schema<ISample>(
         time: String,
         name: String,
     },
-    {timestamps: true}
+    { timestamps: true }
 )
 sampleSchema.plugin(mongoosePaginate)
 

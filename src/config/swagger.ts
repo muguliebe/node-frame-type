@@ -12,18 +12,18 @@ const options: swaggerJSDoc.Options = {
             description: 'A comprehensive Node.js TypeScript API framework',
             contact: {
                 name: 'API Support',
-                email: 'support@example.com'
-            }
+                email: 'support@example.com',
+            },
         },
         servers: [
             {
                 url: `http://localhost:${serverConfig.port}`,
-                description: 'Development server'
+                description: 'Development server',
             },
             {
                 url: 'https://api.example.com',
-                description: 'Production server'
-            }
+                description: 'Production server',
+            },
         ],
         components: {
             schemas: {
@@ -32,22 +32,22 @@ const options: swaggerJSDoc.Options = {
                     properties: {
                         success: {
                             type: 'boolean',
-                            description: 'Operation success status'
+                            description: 'Operation success status',
                         },
                         data: {
-                            description: 'Response data'
+                            description: 'Response data',
                         },
                         message: {
                             type: 'string',
-                            description: 'Response message'
+                            description: 'Response message',
                         },
                         timestamp: {
                             type: 'string',
                             format: 'date-time',
-                            description: 'Response timestamp'
-                        }
+                            description: 'Response timestamp',
+                        },
                     },
-                    required: ['success', 'timestamp']
+                    required: ['success', 'timestamp'],
                 },
                 HealthResponse: {
                     type: 'object',
@@ -55,23 +55,23 @@ const options: swaggerJSDoc.Options = {
                         status: {
                             type: 'string',
                             enum: ['OK', 'ERROR'],
-                            description: 'Health status'
+                            description: 'Health status',
                         },
                         timestamp: {
                             type: 'string',
-                            format: 'date-time'
+                            format: 'date-time',
                         },
                         uptime: {
                             type: 'number',
-                            description: 'Server uptime in seconds'
+                            description: 'Server uptime in seconds',
                         },
                         version: {
                             type: 'string',
-                            description: 'API version'
+                            description: 'API version',
                         },
                         environment: {
                             type: 'string',
-                            description: 'Runtime environment'
+                            description: 'Runtime environment',
                         },
                         services: {
                             type: 'object',
@@ -80,32 +80,32 @@ const options: swaggerJSDoc.Options = {
                                     type: 'object',
                                     properties: {
                                         msg: {
-                                            type: 'string'
-                                        }
-                                    }
+                                            type: 'string',
+                                        },
+                                    },
                                 },
                                 mongodb: {
                                     type: 'boolean',
-                                    description: 'MongoDB connection status'
+                                    description: 'MongoDB connection status',
                                 },
                                 postgresql: {
                                     type: 'boolean',
-                                    description: 'PostgreSQL connection status'
-                                }
-                            }
-                        }
+                                    description: 'PostgreSQL connection status',
+                                },
+                            },
+                        },
                     },
-                    required: ['status', 'timestamp', 'uptime', 'version', 'environment', 'services']
+                    required: ['status', 'timestamp', 'uptime', 'version', 'environment', 'services'],
                 },
                 PingResponse: {
                     type: 'object',
                     properties: {
                         msg: {
                             type: 'string',
-                            example: 'pong'
-                        }
+                            example: 'pong',
+                        },
                     },
-                    required: ['msg']
+                    required: ['msg'],
                 },
                 SampleInput: {
                     type: 'object',
@@ -113,25 +113,25 @@ const options: swaggerJSDoc.Options = {
                         name: {
                             type: 'string',
                             description: 'Sample name',
-                            example: 'test sample'
-                        }
+                            example: 'test sample',
+                        },
                     },
-                    required: ['name']
+                    required: ['name'],
                 },
                 Error: {
                     type: 'object',
                     properties: {
                         message: {
                             type: 'string',
-                            description: 'Error message'
+                            description: 'Error message',
                         },
                         code: {
                             type: 'string',
-                            description: 'Error code'
-                        }
+                            description: 'Error code',
+                        },
                     },
-                    required: ['message']
-                }
+                    required: ['message'],
+                },
             },
             responses: {
                 BadRequest: {
@@ -139,56 +139,53 @@ const options: swaggerJSDoc.Options = {
                     content: {
                         'application/json': {
                             schema: {
-                                $ref: '#/components/schemas/Error'
-                            }
-                        }
-                    }
+                                $ref: '#/components/schemas/Error',
+                            },
+                        },
+                    },
                 },
                 NotFound: {
                     description: 'Resource not found',
                     content: {
                         'application/json': {
                             schema: {
-                                $ref: '#/components/schemas/Error'
-                            }
-                        }
-                    }
+                                $ref: '#/components/schemas/Error',
+                            },
+                        },
+                    },
                 },
                 InternalServerError: {
                     description: 'Internal Server Error',
                     content: {
                         'application/json': {
                             schema: {
-                                $ref: '#/components/schemas/Error'
-                            }
-                        }
-                    }
-                }
-            }
+                                $ref: '#/components/schemas/Error',
+                            },
+                        },
+                    },
+                },
+            },
         },
         tags: [
             {
                 name: 'Health',
-                description: 'System health and status endpoints'
+                description: 'System health and status endpoints',
             },
             {
                 name: 'Ping',
-                description: 'Ping and connectivity endpoints'
+                description: 'Ping and connectivity endpoints',
             },
             {
                 name: 'Sample',
-                description: 'Sample data operations'
+                description: 'Sample data operations',
             },
             {
                 name: 'Users',
-                description: 'User management operations'
-            }
-        ]
+                description: 'User management operations',
+            },
+        ],
     },
-    apis: [
-        './src/api/**/*.ts',
-        './src/api/v1/**/*.ts'
-    ]
+    apis: ['./src/api/**/*.ts', './src/api/v1/**/*.ts'],
 }
 
 export const swaggerSpec = swaggerJSDoc(options)

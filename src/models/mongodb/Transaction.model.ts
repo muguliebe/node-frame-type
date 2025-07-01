@@ -18,7 +18,7 @@ const transactionSchema = new mongoose.Schema(
         contentLength: Number,
         gid: String,
     },
-    {timestamps: true}
+    { timestamps: true }
 )
 transactionSchema.plugin(mongoosePaginate)
 

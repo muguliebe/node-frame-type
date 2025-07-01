@@ -1,5 +1,5 @@
-import 'reflect-metadata';
-import './controllers/health/HealthController';
-import './controllers/ping/PingController';
-import './controllers/sample/SampleController';
-import './controllers/user/UsersController';
+import 'reflect-metadata'
+import './parts/health/controller/HealthController'
+import './parts/com/controller/PingController'
+import './parts/sample/controller/SampleController'
+import './parts/user/controller/UsersController'

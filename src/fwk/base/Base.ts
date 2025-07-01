@@ -1,4 +1,4 @@
-import {IRouter, Router} from 'express'
+import { IRouter, Router } from 'express'
 
 export interface InitRouterOut {
     baseUrl?: string

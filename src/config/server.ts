@@ -13,5 +13,5 @@ export const getServerConfig = (): ServerConfig => ({
     logLevel: process.env.LOG_LEVEL || 'info',
     logDir: process.env.LOG_DIR || './log',
     isCluster: process.env.IS_CLUSTER === 'true',
-    mqUse: process.env.MQ_USE === 'true'
+    mqUse: process.env.MQ_USE === 'true',
 })

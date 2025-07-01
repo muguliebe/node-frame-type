@@ -1,13 +1,13 @@
 // noinspection DuplicatedCode
 
-import {NextFunction, Request, Response} from 'express'
+import { NextFunction, Request, Response } from 'express'
 import Transaction from '../../models/mongodb/Transaction.model'
-import {Address4, Address6} from 'ip-address'
-import {v4 as uuidv4} from 'uuid'
+import { Address4, Address6 } from 'ip-address'
+import { v4 as uuidv4 } from 'uuid'
 import CommonArea from '../../models/entities/commonArea'
 import os from 'os'
-import {format} from 'date-fns'
-import {BaseRequest, BaseResponse} from '../../types/base'
+import { format } from 'date-fns'
+import { BaseRequest, BaseResponse } from '../../types/base'
 import amqp from 'amqplib'
 import limit from 'simple-rate-limiter'
 import Static from '../../lib/static'
@@ -140,7 +140,7 @@ async function setQueue() {
     try {
         const connection = await amqp.connect(process.env.MQ_URL)
         channel = await connection.createConfirmChannel()
-        await channel.assertExchange(exchange, 'topic', {durable: true})
+        await channel.assertExchange(exchange, 'topic', { durable: true })
     } catch (e) {
         log.error('when connect mq')
         throw e
@@ -166,7 +166,7 @@ async function pubQueue(req: BaseRequest, res: BaseResponse, responseTime: strin
     }
 
     if (!channel) await setQueue()
-    await channel.sendToQueue(exchange, Buffer.from(JSON.stringify(tr)), {persistent: true})
+    await channel.sendToQueue(exchange, Buffer.from(JSON.stringify(tr)), { persistent: true })
 }
 
 export default allAdvice

@@ -6,11 +6,11 @@ import bodyParser from 'body-parser'
 import helmet from 'helmet'
 import path from 'path'
 import allAdvice from './middleware/allAdvice'
-import mongoose, {ConnectOptions} from 'mongoose'
+import mongoose, { ConnectOptions } from 'mongoose'
 import notFoundErrorMiddleware from './middleware/not-found-error.middleware'
 import readReadSync from 'recursive-readdir-sync'
 import schedule from 'node-schedule'
-import {BatchInitOut, InitRouterOut} from './base/Base'
+import { BatchInitOut, InitRouterOut } from './base/Base'
 import cluster from 'cluster'
 import errorMiddleware from '@/fwk/middleware/error.middleware'
 import swaggerUi from 'swagger-ui-express'
@@ -29,7 +29,7 @@ export default class ServerConfig {
     app: Express.Application
     port: number
 
-    constructor({app, port = 3000, batchPath, mqPath, basePath}: ServerConfigIn) {
+    constructor({ app, port = 3000, batchPath, mqPath, basePath }: ServerConfigIn) {
         this.app = app
         this.setDefault()
         this.setMiddleware()
@@ -44,9 +44,13 @@ export default class ServerConfig {
         try {
             // Register tsoa routes
             RegisterRoutes(this.app)
-            
+
             if (process.env.NODE_ENV !== 'test') {
-                if (cluster.worker?.id === 1 || process.env['IS_CLUSTER'] === 'false' || process.env['IS_CLUSTER'] === undefined) {
+                if (
+                    cluster.worker?.id === 1 ||
+                    process.env['IS_CLUSTER'] === 'false' ||
+                    process.env['IS_CLUSTER'] === undefined
+                ) {
                     this.bindBatch(batchPath)
                 }
                 if (process.env.MQ_USE == 'true') {
@@ -64,7 +68,7 @@ export default class ServerConfig {
         this.app.use(cors())
         this.app.set('env', Static.NODE_ENV)
         this.app.set('port', this.port)
-        this.app.use(bodyParser.urlencoded({extended: false}))
+        this.app.use(bodyParser.urlencoded({ extended: false }))
         this.app.use(bodyParser.json())
         this.app.use(helmet())
     }
@@ -76,7 +80,7 @@ export default class ServerConfig {
     private setSwagger() {
         // Load generated swagger spec
         const swaggerSpec = JSON.parse(fs.readFileSync(path.join(__dirname, '../generated/swagger.json'), 'utf8'))
-        
+
         // Swagger JSON endpoint
         this.app.get('/api-docs.json', (req, res) => {
             res.setHeader('Content-Type', 'application/json')
@@ -84,11 +88,15 @@ export default class ServerConfig {
         })
 
         // Swagger UI
-        this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
-            explorer: true,
-            customCss: '.swagger-ui .topbar { display: none }',
-            customSiteTitle: 'Node Frame Type API Documentation'
-        }))
+        this.app.use(
+            '/api-docs',
+            swaggerUi.serve,
+            swaggerUi.setup(swaggerSpec, {
+                explorer: true,
+                customCss: '.swagger-ui .topbar { display: none }',
+                customSiteTitle: 'Node Frame Type API Documentation',
+            })
+        )
 
         log.debug('Swagger documentation available at /api-docs')
     }
@@ -120,9 +128,6 @@ export default class ServerConfig {
             log.error(`listen error: ${error}`)
         }
     }
-
-
-
 
     private bindBatch(batchPath: string) {
         const controllers = path.join(batchPath)

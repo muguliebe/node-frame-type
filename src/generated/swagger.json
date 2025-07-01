@@ -162,18 +162,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"PingResponse": {
-				"properties": {
-					"msg": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"msg"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
 			"HealthResponse": {
 				"properties": {
 					"status": {
@@ -231,6 +219,18 @@
 					"version",
 					"environment",
 					"services"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"PingResponse": {
+				"properties": {
+					"msg": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"msg"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -423,6 +423,29 @@
 				}
 			}
 		},
+		"/health": {
+			"get": {
+				"operationId": "GetHealth",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HealthResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get system health status\nReturns comprehensive health information including service status and connectivity",
+				"tags": [
+					"Health"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
 		"/ping": {
 			"get": {
 				"operationId": "Ping",
@@ -470,29 +493,6 @@
 				"description": "Get external IP\nReturns the server's external IP address",
 				"tags": [
 					"Ping"
-				],
-				"security": [],
-				"parameters": []
-			}
-		},
-		"/health": {
-			"get": {
-				"operationId": "GetHealth",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/HealthResponse"
-								}
-							}
-						}
-					}
-				},
-				"description": "Get system health status\nReturns comprehensive health information including service status and connectivity",
-				"tags": [
-					"Health"
 				],
 				"security": [],
 				"parameters": []

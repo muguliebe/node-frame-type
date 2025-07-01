@@ -1,4 +1,4 @@
-import {servicePing} from '@/service/core/ping.service'
+import {servicePing} from '@/parts/com/service/ping.service'
 
 describe('Ping Service', () => {
     describe('ping', () => {

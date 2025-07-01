@@ -21,15 +21,9 @@ export interface PaginationResponse<T> {
     }
 }
 
-export interface HealthCheckResponse {
-    status: 'OK' | 'ERROR'
-    timestamp: string
-    uptime: number
-    version: string
-    environment: string
-    services: {
-        ping: any
-        mongodb: boolean
-        postgresql: boolean
-    }
-}
+// Re-export all DTOs from parts for convenience
+export * from '../../parts/user/dto/user.dto'
+export * from '../../parts/sample/dto/sample.dto'
+export * from '../../parts/com/dto/ping.dto'
+export * from '../../parts/com/dto/common.dto'
+export * from '../../parts/health/dto/health.dto'

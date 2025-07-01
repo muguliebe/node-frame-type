@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import './paths'
-import ServerConfig, {ServerConfigIn} from '@/fwk/server.config'
+import ServerConfig, { ServerConfigIn } from '@/fwk/server.config'
 import * as winston from 'winston'
 import * as logging from '@/lib/logger'
 import winstonDaily from 'winston-daily-rotate-file'
@@ -10,16 +10,14 @@ import fs from 'fs'
 import dotenv from 'dotenv'
 import EventEmitter from 'events'
 import Express from 'express'
-import {servicePostup} from '@/service/core/sample/postup.service'
+// import { servicePostup } from '@/service/core/sample/postup.service' // TODO: 서비스 구현 필요
 import cluster from 'cluster'
 import os from 'os'
-
 
 const emitter = new EventEmitter()
 const totCpu = os.cpus().length
 const app = Express()
 let server: ServerConfig | undefined
-
 
 export async function main() {
     const mainStart = process.hrtime()
@@ -29,7 +27,7 @@ export async function main() {
         throw new Error(`env(${env}) not matches in dev|test|stg|stg_bat|prd|prd-bat`)
     }
     // config.default.env 로드 후 => 환경별 env 파일 로드 하여 덮어씌우기
-    dotenv.config({path: path.join(__dirname, `./config/environments/config.default.env`)})
+    dotenv.config({ path: path.join(__dirname, `./config/environments/config.default.env`) })
     if (fs.existsSync(path.join(__dirname, `./config/environments/config.${env}.env`))) {
         const envConfig = dotenv.parse(fs.readFileSync(path.join(__dirname, `./config/environments/config.${env}.env`)))
         for (const key in envConfig) {
@@ -94,7 +92,7 @@ export async function main() {
         batchPath: path.join(__dirname, './batch'),
         mqPath: path.join(__dirname, './subscriber/mq'),
         port: process.env.PORT || 3000,
-        basePath: __dirname
+        basePath: __dirname,
     })
     if (process.env.NODE_ENV !== 'test') {
         await server.listen()
@@ -108,7 +106,7 @@ export async function main() {
 
 emitter.on('post', async () => {
     log.silly('post event')
-    servicePostup.postUp()
+    // servicePostup.postUp() // TODO: 서비스 구현 필요
 })
 
 if (process.env['IS_CLUSTER'] === 'true') {
